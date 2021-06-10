@@ -2,7 +2,7 @@ package record
 
 import "github.com/erbilsilik/getir-go-challange/entity"
 
-func ListRecords(s *Service) ([]*entity.Record, error) {
+func List(s *Service) ([]*entity.Record, error) {
 	records, err := s.repo.List()
 	if err != nil {
 		return nil, err

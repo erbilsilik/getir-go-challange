@@ -6,9 +6,7 @@ type Reader interface {
 	List() ([]*entity.Record, error)
 }
 
-type Writer interface {
-	Create(e *entity.Record) error
-}
+type Writer interface {}
 
 type Repository interface {
 	Reader
@@ -23,6 +21,5 @@ type FindAvailableRecordsQuery struct {
 }
 
 type UseCase interface {
-	ListRecords(query *FindAvailableRecordsQuery) ([]*entity.Record, error)
-	CreateRecord(key string, totalCount int) error
+	List(/*query *FindAvailableRecordsQuery*/) ([]*entity.Record, error)
 }

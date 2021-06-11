@@ -51,7 +51,12 @@ func getFilteredRecords(service record.UseCase) http.Handler {
 				CreatedAt: r.CreatedAt,
 			})
 		}
-		if err := json.NewEncoder(w).Encode(toJ); err != nil {
+		response := presenter.Response{
+			Code: 0,
+			Msg: "Success",
+			Records: toJ,
+		}
+		if err := json.NewEncoder(w).Encode(response); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			_, err := w.Write([]byte(errorMessage))
 			if err != nil {

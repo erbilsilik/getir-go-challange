@@ -7,3 +7,9 @@ type Record struct {
 	TotalCount int    `json:"totalCount"`
 	CreatedAt  time.Time `json:"createdAt"`
 }
+
+type Response struct {
+	Code        int `json:"code"`
+	Msg string    `json:"msg"`
+	Records  []*Record `json:"records"`
+}

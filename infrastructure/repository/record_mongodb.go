@@ -2,23 +2,13 @@ package repository
 
 import (
 	"context"
-	"fmt"
 	"github.com/erbilsilik/getir-go-challange/entity"
 	"github.com/erbilsilik/getir-go-challange/pkg/mongodb"
+	"github.com/erbilsilik/getir-go-challange/pkg/utilities"
 	"github.com/erbilsilik/getir-go-challange/usecase/record"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
-	"time"
 )
-
-// TODO move this util method
-func parseDate(layout string, dateString string) time.Time {
-	parsedDate, err := time.Parse(layout, dateString)
-	if err != nil {
-		panic("parsing date error")
-	}
-	return parsedDate
-}
 
 type RecordRepository struct {
 	Collection *mongo.Collection
@@ -34,13 +24,10 @@ func NewRecordRepositoryMongoDB() *RecordRepository {
 func (r RecordRepository) List(q *record.FindAvailableRecordsQuery) ([]*entity.RecordTotalCount, error) {
 	ctx := context.TODO()
 	var records []*entity.RecordTotalCount
-	//findOptions := options.Find()
-	//findOptions.SetLimit(20)
-	//findOptions.SetSkip(2)
 
 	layout := "2006-01-02"
-	startDateParsed := parseDate(layout, q.StartDate)
-	endDateParsed := parseDate(layout, q.EndDate)
+	startDateParsed := utilities.ParseDate(layout, q.StartDate)
+	endDateParsed := utilities.ParseDate(layout, q.EndDate)
 
 	pipeline := mongo.Pipeline{
 		{
@@ -72,8 +59,7 @@ func (r RecordRepository) List(q *record.FindAvailableRecordsQuery) ([]*entity.R
 	cur, err := r.Collection.Aggregate(ctx, pipeline)
 
 	if err != nil {
-		fmt.Println(err)
-		//return records, err
+		return records, err
 	}
 
 	for cur.Next(ctx) {

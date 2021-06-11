@@ -39,8 +39,8 @@ func main() {
 	srv := &http.Server{
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
-		Addr:         ":" + "8081",
-		// Handler:      context.ClearHandler(http.DefaultServeMux),
+		Addr:         ":" + os.Getenv("API_PORT"),
+		//Handler:      context.ClearHandler(http.DefaultServeMux),
 		ErrorLog: logger,
 	}
 	err := srv.ListenAndServe()

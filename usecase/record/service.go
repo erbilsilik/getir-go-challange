@@ -12,7 +12,7 @@ func NewService(r Repository) *Service {
 	}
 }
 
-func (s *Service) List(query *CalculateRecordsTotalCountQuery) ([]*entity.RecordTotalCount, error) {
+func (s *Service) List(query *CalculateRecordsTotalCountQuery) ([]*entity.Record, error) {
 	records, err := s.repo.CalculateRecordsTotalCount(query)
 	if err != nil {
 		return nil, err

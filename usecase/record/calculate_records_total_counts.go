@@ -2,7 +2,7 @@ package record
 
 import "github.com/erbilsilik/getir-go-challange/entity"
 
-func (s *Service) CalculateRecordsTotalCount(q *CalculateRecordsTotalCountQuery) ([]*entity.RecordTotalCount, error) {
+func (s *Service) CalculateRecordsTotalCount(q *CalculateRecordsTotalCountQuery) ([]*entity.Record, error) {
 	records, err := s.repo.CalculateRecordsTotalCount(q)
 	if err != nil {
 		return nil, err

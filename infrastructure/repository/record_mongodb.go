@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/erbilsilik/getir-go-challange/entity"
 	"github.com/erbilsilik/getir-go-challange/pkg/mongodb"
-	"github.com/erbilsilik/getir-go-challange/pkg/utilities"
 	"github.com/erbilsilik/getir-go-challange/usecase/record"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -21,20 +20,16 @@ func NewRecordRepositoryMongoDB() *RecordRepository {
 	}
 }
 
-func (r RecordRepository) CalculateRecordsTotalCount(q *record.CalculateRecordsTotalCountQuery) ([]*entity.RecordTotalCount, error) {
+func (r RecordRepository) CalculateRecordsTotalCount(q *record.CalculateRecordsTotalCountQuery) ([]*entity.Record, error) {
 	ctx := context.TODO()
-	var records []*entity.RecordTotalCount
-
-	layout := "2006-01-02"
-	startDateParsed := utilities.ParseDate(layout, q.StartDate)
-	endDateParsed := utilities.ParseDate(layout, q.EndDate)
+	var records []*entity.Record
 
 	pipeline := mongo.Pipeline{
 		{
 			{"$match", bson.D{
 				{"createdAt", bson.D{
-					{"$gte", startDateParsed },
-					{"$lte", endDateParsed },
+					{"$gte", q.StartDate },
+					{"$lte", q.EndDate },
 				}},
 			}},
 		},
@@ -63,7 +58,7 @@ func (r RecordRepository) CalculateRecordsTotalCount(q *record.CalculateRecordsT
 	}
 
 	for cur.Next(ctx) {
-		var r entity.RecordTotalCount
+		var r entity.Record
 		err := cur.Decode(&r)
 		if err != nil {
 			return records, err

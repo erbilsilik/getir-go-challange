@@ -5,6 +5,7 @@ import (
 	"github.com/codegangsta/negroni"
 	"github.com/erbilsilik/getir-go-challange/api/presenter"
 	"github.com/erbilsilik/getir-go-challange/entity"
+	"github.com/erbilsilik/getir-go-challange/pkg/utilities"
 	"github.com/erbilsilik/getir-go-challange/usecase/record"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -14,16 +15,22 @@ import (
 func getFilteredRecords(service record.UseCase) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		errorMessage := "Error reading records"
-		var records []*entity.RecordTotalCount
+		var records []*entity.Record
 		var err error
+
 		minCount, _ := strconv.Atoi(r.URL.Query().Get("minCount"))
 		maxCount, _ := strconv.Atoi(r.URL.Query().Get("maxCount"))
+		layout := "2006-01-02"
+		startDateParsed := utilities.ParseDate(layout, r.URL.Query().Get("startDate"))
+		endDateParsed := utilities.ParseDate(layout, r.URL.Query().Get("endDate"))
+
 		q := record.CalculateRecordsTotalCountQuery{
-			StartDate: r.URL.Query().Get("startDate"),
-			EndDate:   r.URL.Query().Get("endDate"),
+			StartDate: startDateParsed,
+			EndDate:   endDateParsed,
 			MinCount:  minCount,
 			MaxCount:  maxCount,
 		}
+
 		records, err = service.CalculateRecordsTotalCount(&q)
 		w.Header().Set("Content-Type", "application/json")
 		if err != nil && err != entity.ErrNotFound {

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/erbilsilik/getir-go-challange/infrastructure/repository"
 	"github.com/erbilsilik/getir-go-challange/pkg/mongodb"
+	"github.com/erbilsilik/getir-go-challange/pkg/utilities"
 	"github.com/erbilsilik/getir-go-challange/usecase/record"
 	"log"
 	"os"
@@ -17,10 +18,14 @@ func main()  {
 	recordRepository := repository.NewRecordRepositoryMongoDB()
 	recordService := record.NewService(recordRepository)
 
+	layout := "2006-01-02"
+	startDateParsed := utilities.ParseDate(layout, "2016-01-26")
+	endDateParsed := utilities.ParseDate(layout, "2018-02-02")
+
 	// TODO -> Use command line arguments
 	query := record.CalculateRecordsTotalCountQuery{
-		StartDate: "2016-01-26",
-		EndDate: "2018-02-02",
+		StartDate: startDateParsed,
+		EndDate: endDateParsed,
 		MinCount: 2700,
 		MaxCount: 3000,
 	}

@@ -8,22 +8,23 @@ import (
 	"github.com/erbilsilik/getir-go-challange/usecase/record"
 	"github.com/gorilla/mux"
 	"net/http"
+	"strconv"
 )
 
 func getFilteredRecords(service record.UseCase) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		errorMessage := "Error reading records"
-		var data []*entity.Record
+		var records []*entity.RecordTotalCount
 		var err error
-		//minCount, _ := strconv.Atoi(r.URL.Query().Get("minCount"))
-		//maxCount, _ := strconv.Atoi(r.URL.Query().Get("minCount"))
-		//q := record.FindAvailableRecordsQuery{
-		//	StartDate: r.URL.Query().Get("startDate"),
-		//	EndDate:   r.URL.Query().Get("endDate"),
-		//	MinCount:  minCount,
-		//	MaxCount:  maxCount,
-		//}
-		data, err = service.List()
+		minCount, _ := strconv.Atoi(r.URL.Query().Get("minCount"))
+		maxCount, _ := strconv.Atoi(r.URL.Query().Get("maxCount"))
+		q := record.FindAvailableRecordsQuery{
+			StartDate: r.URL.Query().Get("startDate"),
+			EndDate:   r.URL.Query().Get("endDate"),
+			MinCount:  minCount,
+			MaxCount:  maxCount,
+		}
+		records, err = service.List(&q)
 		w.Header().Set("Content-Type", "application/json")
 		if err != nil && err != entity.ErrNotFound {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -34,7 +35,7 @@ func getFilteredRecords(service record.UseCase) http.Handler {
 			return
 		}
 
-		if data == nil {
+		if records == nil {
 			w.WriteHeader(http.StatusNotFound)
 			_, err := w.Write([]byte(errorMessage))
 			if err != nil {
@@ -43,10 +44,11 @@ func getFilteredRecords(service record.UseCase) http.Handler {
 			return
 		}
 		var toJ []*presenter.Record
-		for _, d := range data {
+		for _, r := range records {
 			toJ = append(toJ, &presenter.Record{
-				Key:        d.Key,
-				TotalCount: d.TotalCount,
+				Key:        r.Key,
+				TotalCount: r.TotalCount,
+				CreatedAt: r.CreatedAt,
 			})
 		}
 		if err := json.NewEncoder(w).Encode(toJ); err != nil {

@@ -12,8 +12,8 @@ func NewService(r Repository) *Service {
 	}
 }
 
-func (s *Service) List() ([]*entity.Record, error) {
-	records, err := s.repo.List()
+func (s *Service) List(query *FindAvailableRecordsQuery) ([]*entity.RecordTotalCount, error) {
+	records, err := s.repo.List(query)
 	if err != nil {
 		return nil, err
 	}

@@ -1,7 +1,9 @@
 package presenter
 
+import "time"
+
 type Record struct {
 	Key        string `json:"key"`
 	TotalCount int    `json:"totalCount"`
-	CreatedAt  string `json:"createdAt"`
+	CreatedAt  time.Time `json:"createdAt"`
 }

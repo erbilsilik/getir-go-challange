@@ -2,8 +2,8 @@ package record
 
 import "github.com/erbilsilik/getir-go-challange/entity"
 
-func (s *Service) FindAvailableRecords(q *FindAvailableRecordsQuery) ([]*entity.RecordTotalCount, error) {
-	records, err := s.repo.List(q)
+func (s *Service) CalculateRecordsTotalCount(q *CalculateRecordsTotalCountQuery) ([]*entity.RecordTotalCount, error) {
+	records, err := s.repo.CalculateRecordsTotalCount(q)
 	if err != nil {
 		return nil, err
 	}

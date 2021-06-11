@@ -18,13 +18,13 @@ func getFilteredRecords(service record.UseCase) http.Handler {
 		var err error
 		minCount, _ := strconv.Atoi(r.URL.Query().Get("minCount"))
 		maxCount, _ := strconv.Atoi(r.URL.Query().Get("maxCount"))
-		q := record.FindAvailableRecordsQuery{
+		q := record.CalculateRecordsTotalCountQuery{
 			StartDate: r.URL.Query().Get("startDate"),
 			EndDate:   r.URL.Query().Get("endDate"),
 			MinCount:  minCount,
 			MaxCount:  maxCount,
 		}
-		records, err = service.List(&q)
+		records, err = service.CalculateRecordsTotalCount(&q)
 		w.Header().Set("Content-Type", "application/json")
 		if err != nil && err != entity.ErrNotFound {
 			w.WriteHeader(http.StatusInternalServerError)

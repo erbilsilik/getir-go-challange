@@ -21,7 +21,7 @@ func NewRecordRepositoryMongoDB() *RecordRepository {
 	}
 }
 
-func (r RecordRepository) List(q *record.FindAvailableRecordsQuery) ([]*entity.RecordTotalCount, error) {
+func (r RecordRepository) CalculateRecordsTotalCount(q *record.CalculateRecordsTotalCountQuery) ([]*entity.RecordTotalCount, error) {
 	ctx := context.TODO()
 	var records []*entity.RecordTotalCount
 

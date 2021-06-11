@@ -5,7 +5,7 @@ import (
 )
 
 type Reader interface {
-	List(query *FindAvailableRecordsQuery) ([]*entity.RecordTotalCount, error)
+	CalculateRecordsTotalCount(query *CalculateRecordsTotalCountQuery) ([]*entity.RecordTotalCount, error)
 }
 
 type Writer interface {}
@@ -15,7 +15,7 @@ type Repository interface {
 	Writer
 }
 
-type FindAvailableRecordsQuery struct {
+type CalculateRecordsTotalCountQuery struct {
 	StartDate string
 	EndDate   string
 	MinCount  int
@@ -23,5 +23,5 @@ type FindAvailableRecordsQuery struct {
 }
 
 type UseCase interface {
-	List(query *FindAvailableRecordsQuery) ([]*entity.RecordTotalCount, error)
+	CalculateRecordsTotalCount(query *CalculateRecordsTotalCountQuery) ([]*entity.RecordTotalCount, error)
 }

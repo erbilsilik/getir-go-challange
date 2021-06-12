@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/codegangsta/negroni"
 	"github.com/erbilsilik/getir-go-challange/api/handler"
+	"github.com/erbilsilik/getir-go-challange/api/middleware"
 	"github.com/erbilsilik/getir-go-challange/infrastructure/repository"
 	"github.com/erbilsilik/getir-go-challange/pkg/mongodb"
 	"github.com/erbilsilik/getir-go-challange/usecase/record"
@@ -22,7 +23,7 @@ func main() {
 	// repositories
 	recordRepository := repository.NewRecordRepositoryMongoDB()
 	recordService := record.NewService(recordRepository)
-	//handlers
+	// handlers
 	r := mux.NewRouter()
 	http.Handle("/", r)
 	r.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
@@ -30,6 +31,7 @@ func main() {
 	})
 	n := negroni.New(
 		negroni.NewLogger(),
+		negroni.HandlerFunc(middleware.ValidateCalculateRecordsTotalCountMiddleware),
 	)
 	// record
 	handler.MakeRecordHandlers(r, *n, recordService)

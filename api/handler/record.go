@@ -52,7 +52,12 @@ func getRecordsFilteredByTimeAndTotalCountInGivenNumberRange(service record.UseC
 				CreatedAt:  r.CreatedAt,
 			})
 		}
-		presenter.JSON(w, http.StatusOK, recordPresenter)
+
+		presenter.JSON(
+			w,
+			http.StatusOK,
+			map[string][]*recordPres.Record{ "records": recordPresenter },
+		)
 	})
 }
 

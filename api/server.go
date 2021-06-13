@@ -34,7 +34,7 @@ func Run() {
 	n := negroni.New(
 		negroni.NewRecovery(),
 		negroni.NewLogger(),
-		negroni.HandlerFunc(middleware.EnforceJSONHandler),
+		negroni.HandlerFunc(middleware.EnforceJSONMiddleware),
 	)
 
 	// record

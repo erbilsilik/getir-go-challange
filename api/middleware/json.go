@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func EnforceJSONHandler(rw http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
+func EnforceJSONMiddleware(rw http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 	contentType := r.Header.Get("Content-Type")
 
 	if contentType != "" {

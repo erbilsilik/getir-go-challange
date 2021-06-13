@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	"github.com/codegangsta/negroni"
@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-func main() {
+func Run() {
 	// db
 	mongodb.New(
 		os.Getenv("MONGODB_URI"),

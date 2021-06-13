@@ -20,7 +20,9 @@ func NewRecordRepositoryMongoDB() *RecordRepository {
 	}
 }
 
-func (r RecordRepository) CalculateRecordsTotalCount(q *record.CalculateRecordsTotalCountQuery) ([]*entity.Record, error) {
+func (r RecordRepository) GetRecordsFilteredByTimeAndTotalCountInGivenNumberRange(
+	q *record.RecordsFilteredByTimeAndTotalCountInGivenNumberRangeQuery,
+) ([]*entity.Record, error) {
 	ctx := context.TODO()
 	var records []*entity.Record
 

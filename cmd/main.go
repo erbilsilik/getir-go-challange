@@ -23,13 +23,13 @@ func main()  {
 	endDateParsed := utilities.ParseDate(layout, "2018-02-02")
 
 	// TODO -> Use command line arguments
-	query := record.CalculateRecordsTotalCountQuery{
+	query := record.RecordsFilteredByTimeAndTotalCountInGivenNumberRangeQuery{
 		StartDate: startDateParsed,
 		EndDate: endDateParsed,
 		MinCount: 2700,
 		MaxCount: 3000,
 	}
-	records, err := recordService.CalculateRecordsTotalCount(&query)
+	records, err := recordService.GetRecordsFilteredByTimeAndTotalCountInGivenNumberRange(&query)
 	if err != nil {
 		log.Fatal(err)
 	}

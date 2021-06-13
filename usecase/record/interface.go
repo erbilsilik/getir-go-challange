@@ -6,7 +6,9 @@ import (
 )
 
 type Reader interface {
-	CalculateRecordsTotalCount(query *CalculateRecordsTotalCountQuery) ([]*entity.Record, error)
+	GetRecordsFilteredByTimeAndTotalCountInGivenNumberRange(
+		query *RecordsFilteredByTimeAndTotalCountInGivenNumberRangeQuery,
+	) ([]*entity.Record, error)
 }
 
 type Writer interface {}
@@ -16,7 +18,7 @@ type Repository interface {
 	Writer
 }
 
-type CalculateRecordsTotalCountQuery struct {
+type RecordsFilteredByTimeAndTotalCountInGivenNumberRangeQuery struct {
 	StartDate time.Time
 	EndDate   time.Time
 	MinCount  int
@@ -24,5 +26,7 @@ type CalculateRecordsTotalCountQuery struct {
 }
 
 type UseCase interface {
-	CalculateRecordsTotalCount(query *CalculateRecordsTotalCountQuery) ([]*entity.Record, error)
+	GetRecordsFilteredByTimeAndTotalCountInGivenNumberRange(
+		query *RecordsFilteredByTimeAndTotalCountInGivenNumberRangeQuery,
+	) ([]*entity.Record, error)
 }

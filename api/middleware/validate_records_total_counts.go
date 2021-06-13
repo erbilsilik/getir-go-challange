@@ -6,10 +6,13 @@ import (
 	"strconv"
 )
 
-func ValidateCalculateRecordsTotalCountMiddleware(rw http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
+func ValidateGetRecordsFilteredByTimeAndTotalCountInGivenNumberRange(
+	rw http.ResponseWriter,
+	r *http.Request,
+	next http.HandlerFunc,
+) {
 	q := r.URL.Query()
 
-	// do some stuff before
 	var validCount = regexp.MustCompile(`^\d+$`)
 	var validDateString = regexp.MustCompile(`^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$`)
 

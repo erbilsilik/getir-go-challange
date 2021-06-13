@@ -31,7 +31,9 @@ func main() {
 	})
 	n := negroni.New(
 		negroni.NewLogger(),
-		negroni.HandlerFunc(middleware.ValidateCalculateRecordsTotalCountMiddleware),
+		negroni.HandlerFunc(
+			middleware.ValidateGetRecordsFilteredByTimeAndTotalCountInGivenNumberRange,
+		), // TODO -> make this route specific
 	)
 	// record
 	handler.MakeRecordHandlers(r, *n, recordService)

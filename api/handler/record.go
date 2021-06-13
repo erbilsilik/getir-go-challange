@@ -12,7 +12,7 @@ import (
 	"strconv"
 )
 
-func getFilteredRecordsByCounts(service record.UseCase) http.Handler {
+func getRecordsFilteredByTimeAndTotalCountInGivenNumberRange(service record.UseCase) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		errorMessage := "Error reading records"
 		var records []*entity.Record
@@ -26,15 +26,13 @@ func getFilteredRecordsByCounts(service record.UseCase) http.Handler {
 		endDateParsed := utilities.ParseDate(layout, r.URL.Query().Get("endDate"))
 
 		// create query struct
-		q := record.CalculateRecordsTotalCountQuery{
+		q := record.RecordsFilteredByTimeAndTotalCountInGivenNumberRangeQuery{
 			StartDate: startDateParsed,
 			EndDate:   endDateParsed,
 			MinCount:  minCount,
 			MaxCount:  maxCount,
 		}
-
-		// calculate records counts by query
-		records, err = service.CalculateRecordsTotalCount(&q)
+		records, err = service.GetRecordsFilteredByTimeAndTotalCountInGivenNumberRange(&q)
 
 		// server error
 		w.Header().Set("Content-Type", "application/json")
@@ -58,9 +56,9 @@ func getFilteredRecordsByCounts(service record.UseCase) http.Handler {
 		}
 
 		// serialize records data and format for response
-		var toJ []*presenter.Record
+		var recordPresenter []*presenter.Record
 		for _, r := range records {
-			toJ = append(toJ, &presenter.Record{
+			recordPresenter = append(recordPresenter, &presenter.Record{
 				Key:        r.Key,
 				TotalCount: r.TotalCount,
 				CreatedAt: r.CreatedAt,
@@ -69,7 +67,7 @@ func getFilteredRecordsByCounts(service record.UseCase) http.Handler {
 		response := presenter.Response{
 			Code: 0,
 			Msg: "Success",
-			Records: toJ,
+			Records: recordPresenter,
 		}
 		if err := json.NewEncoder(w).Encode(response); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -82,7 +80,7 @@ func getFilteredRecordsByCounts(service record.UseCase) http.Handler {
 }
 
 func MakeRecordHandlers(r *mux.Router, n negroni.Negroni, service record.UseCase) {
-	r.Handle("/v1/records/counts", n.With(
-		negroni.Wrap(getFilteredRecordsByCounts(service)),
-	)).Methods("GET", "OPTIONS").Name("calculateRecordsTotalCounts")
+	r.Handle("/v1/records", n.With(
+		negroni.Wrap(getRecordsFilteredByTimeAndTotalCountInGivenNumberRange(service)),
+	)).Methods("GET", "OPTIONS").Name("getRecordsFilteredByTimeAndTotalCountInGivenNumberRange")
 }

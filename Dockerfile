@@ -3,9 +3,6 @@ FROM golang:alpine as builder
 
 # ENV GO111MODULE=on
 
-# Add Maintainer info
-LABEL maintainer="Erbil Silik <silik.erbil@gmail.com>"
-
 # Install git.
 # Git is required for fetching the dependencies.
 RUN apk update && apk add --no-cache git

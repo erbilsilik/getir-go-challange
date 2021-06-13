@@ -28,6 +28,7 @@ func New(connectionString string, database string) {
 	if client, err := mongo.Connect(ctx, options.Client().ApplyURI(connectionString)); err != nil {
 		fmt.Println(err)
 	} else {
+		fmt.Println("Created MongoDB client")
 		Instance = &mongodbDatabase{
 			Db: client.Database(database),
 		}

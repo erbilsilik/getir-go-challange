@@ -29,7 +29,7 @@ func main()  {
 		MinCount: 2700,
 		MaxCount: 3000,
 	}
-	records, err := recordService.List(&query)
+	records, err := recordService.CalculateRecordsTotalCount(&query)
 	if err != nil {
 		log.Fatal(err)
 	}

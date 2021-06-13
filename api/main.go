@@ -20,9 +20,11 @@ func main() {
 		os.Getenv("MONGODB_URI"),
 		os.Getenv("MONGODB_DB"),
 	)
+
 	// repositories
 	recordRepository := repository.NewRecordRepositoryMongoDB()
 	recordService := record.NewService(recordRepository)
+
 	// handlers
 	r := mux.NewRouter()
 	http.Handle("/", r)
@@ -30,15 +32,17 @@ func main() {
 		w.WriteHeader(http.StatusOK)
 	})
 	n := negroni.New(
+		negroni.NewRecovery(),
 		negroni.NewLogger(),
-		negroni.HandlerFunc(
-			middleware.ValidateGetRecordsFilteredByTimeAndTotalCountInGivenNumberRange,
-		), // TODO -> make this route specific
+		negroni.HandlerFunc(middleware.EnforceJSONHandler),
 	)
+
 	// record
 	handler.MakeRecordHandlers(r, *n, recordService)
+
 	// logger
 	logger := log.New(os.Stderr, "logger: ", log.Lshortfile)
+
 	// server
 	srv := &http.Server{
 		ReadTimeout:  5 * time.Second,

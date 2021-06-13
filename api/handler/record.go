@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"github.com/codegangsta/negroni"
+	recordMiddleware "github.com/erbilsilik/getir-go-challange/api/middleware/record"
 	"github.com/erbilsilik/getir-go-challange/api/presenter"
 	"github.com/erbilsilik/getir-go-challange/entity"
 	"github.com/erbilsilik/getir-go-challange/pkg/utilities"
@@ -65,7 +66,7 @@ func getRecordsFilteredByTimeAndTotalCountInGivenNumberRange(service record.UseC
 			})
 		}
 		response := presenter.Response{
-			Code: 0,
+			Code: http.StatusOK,
 			Msg: "Success",
 			Records: recordPresenter,
 		}
@@ -81,6 +82,9 @@ func getRecordsFilteredByTimeAndTotalCountInGivenNumberRange(service record.UseC
 
 func MakeRecordHandlers(r *mux.Router, n negroni.Negroni, service record.UseCase) {
 	r.Handle("/v1/records", n.With(
+		negroni.HandlerFunc(
+			recordMiddleware.ValidateGetRecordsFilteredByTimeAndTotalCountInGivenNumberRange,
+		),
 		negroni.Wrap(getRecordsFilteredByTimeAndTotalCountInGivenNumberRange(service)),
 	)).Methods("GET", "OPTIONS").Name("getRecordsFilteredByTimeAndTotalCountInGivenNumberRange")
 }

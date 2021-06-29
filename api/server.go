@@ -6,6 +6,7 @@ import (
 	"github.com/erbilsilik/getir-go-challange/api/middleware"
 	"github.com/erbilsilik/getir-go-challange/infrastructure/repository"
 	"github.com/erbilsilik/getir-go-challange/pkg/mongodb"
+	"github.com/erbilsilik/getir-go-challange/usecase/configuration"
 	"github.com/erbilsilik/getir-go-challange/usecase/record"
 	"github.com/gorilla/mux"
 	"log"
@@ -25,6 +26,9 @@ func Run() {
 	recordRepository := repository.NewRecordRepositoryMongoDB()
 	recordService := record.NewService(recordRepository)
 
+	configurationRepository := repository.NewConfigurationRepository();
+	configurationService := configuration.NewService(configurationRepository)
+
 	// handlers
 	r := mux.NewRouter()
 	http.Handle("/", r)
@@ -39,6 +43,9 @@ func Run() {
 
 	// record
 	handler.MakeRecordHandlers(r, *n, recordService)
+
+	// configuration
+	handler.MakeConfigurationHandlers(r, *n, configurationService)
 
 	// logger
 	logger := log.New(os.Stderr, "logger: ", log.Lshortfile)

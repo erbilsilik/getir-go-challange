@@ -20,7 +20,7 @@ https://eltonminetto.dev/en/post/2020-07-06-clean-architecture-2years-later/
 
 ## API Requests
 
-*TLDR*: `/requests.sh`
+*TLDR*: `./requests.sh`
 
 #### 1. For the First Endpoint (fetch data from mongodb)
 ```

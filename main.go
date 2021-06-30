@@ -1,18 +1,18 @@
 package main
 
 import (
-	"github.com/erbilsilik/getir-go-challange/api"
+	server "github.com/erbilsilik/getir-go-challange/api"
 	"github.com/joho/godotenv"
 	"log"
 )
 
-func init()  {
+func init() {
 	if err := godotenv.Load(); err != nil {
 		log.Print("sad .env file found")
 	}
 }
 
-func main()  {
+func main() {
 	server.Run()
 	// cmd.Run()
 }

@@ -1,25 +1,33 @@
 # getir-go-challange
 
+
 ## Architecture
 
 https://eltonminetto.dev/en/post/2020-07-06-clean-architecture-2years-later/
 
 ---
-## Running
+## Build
 
-`docker-compose up`
+`make`
 
 ---
-## Testing
+## Run Tests
 
-####1. For the First Endpoint (fetch data from mongodb)
+`make test`
+
+---
+
+
+## API Requests
+
+#### 1. For the First Endpoint (fetch data from mongodb)
 ```
 curl --request GET \
   --url 'http://localhost:8080/v1/records?startDate=2016-01-26&endDate=2018-02-02&minCount=2700&maxCount=3000' \
   --header 'Content-Type: application/json'
 ```
 ---
-####2. In-memory Endpoints
+#### 2. In-memory Endpoints
 
 ##### Create configuration
 ```
@@ -39,7 +47,3 @@ curl --request GET \
   --header 'Content-Type: application/json'
 ```
 
-## Further improvements
-
-- Unit/Integration tests
-- CI/CD pipeline

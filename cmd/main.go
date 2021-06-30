@@ -1,4 +1,4 @@
-package cmd
+package main
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ import (
 	"os"
 )
 
-func Run()  {
+func main()  {
 	mongodb.New(
 		os.Getenv("MONGODB_URI"),
 		os.Getenv("MONGODB_DB"),

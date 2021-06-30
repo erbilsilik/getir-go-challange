@@ -17,7 +17,7 @@ func JSON(w http.ResponseWriter, statusCode int, data interface{}) {
 	w.WriteHeader(statusCode)
 
 	var msg string
-	if statusCode == http.StatusOK {
+	if statusCode == http.StatusOK || statusCode == http.StatusCreated {
 		msg = "Success"
 	} else {
 		msg = "Failed"

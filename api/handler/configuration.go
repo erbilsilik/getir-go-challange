@@ -25,8 +25,8 @@ func createConfig(service configuration.UseCase) http.Handler {
 
 		presenter.JSON(
 			w,
-			http.StatusOK,
-			"ok",
+			http.StatusCreated,
+			config,
 		)
 	})
 }

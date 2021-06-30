@@ -48,8 +48,8 @@ func getConfig(service configuration.UseCase) http.Handler {
 func MakeConfigurationHandlers(r *mux.Router, n negroni.Negroni, service configuration.UseCase) {
 	r.Handle("/v1/configurations", n.With(
 		negroni.Wrap(createConfig(service)),
-	)).Methods("POST", "OPTIONS").Name("createConfig");
+	)).Methods("POST", "OPTIONS").Name("createConfig")
 	r.Handle("/v1/configurations", n.With(
 		negroni.Wrap(getConfig(service)),
-	)).Methods("GET", "OPTIONS").Name("getConfig");
+	)).Methods("GET", "OPTIONS").Name("getConfig")
 }

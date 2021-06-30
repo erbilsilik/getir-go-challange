@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-type response struct {
+type Response struct {
 	Code        	 	 int `json:"code"`
 	Msg string      	`json:"msg"`
 	Data interface{}    `json:"data"`
@@ -23,7 +23,7 @@ func JSON(w http.ResponseWriter, statusCode int, data interface{}) {
 		msg = "Failed"
 	}
 
-	response := response{
+	response := Response{
 		Code: statusCode,
 		Msg: msg,
 		Data: data,

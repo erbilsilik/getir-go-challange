@@ -8,3 +8,30 @@ services:
     restart: on-failure
     volumes:
       - .:/usr/src/app/
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./ops/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    container_name: getir-go-challange-prometheus
+    network_mode: "bridge"
+  prometheus-pushgateway:
+    image: prom/pushgateway
+    container_name: getir-go-challange-pushgateway
+    expose:
+      - 9091
+    ports:
+      - "9091:9091"
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    container_name: getir-go-challange-grafana
+    network_mode: "bridge"
+    depends_on:
+      - prometheus
+      - prometheus-pushgateway

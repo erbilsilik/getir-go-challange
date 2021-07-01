@@ -5,10 +5,13 @@ import (
 	"github.com/erbilsilik/getir-go-challange/api/handler"
 	"github.com/erbilsilik/getir-go-challange/api/middleware"
 	"github.com/erbilsilik/getir-go-challange/infrastructure/repository"
+	"github.com/erbilsilik/getir-go-challange/pkg/metric"
 	"github.com/erbilsilik/getir-go-challange/pkg/mongodb"
 	"github.com/erbilsilik/getir-go-challange/usecase/configuration"
 	"github.com/erbilsilik/getir-go-challange/usecase/record"
+	"github.com/gorilla/context"
 	"github.com/gorilla/mux"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"log"
 	"net/http"
 	"os"
@@ -24,27 +27,36 @@ func Run() {
 
 	// repositories
 	recordRepository := repository.NewRecordRepositoryMongoDB()
-	recordService := record.NewService(recordRepository)
-
 	configurationRepository := repository.NewConfigurationRepository();
+
+	// services
+	recordService := record.NewService(recordRepository)
 	configurationService := configuration.NewService(configurationRepository)
+
+	// metrics
+	metricService, err := metric.NewPrometheusService()
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 
 	// handlers
 	r := mux.NewRouter()
 	http.Handle("/", r)
+	http.Handle("/metrics", promhttp.Handler())
 	r.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	})
+
+	// middlewares
 	n := negroni.New(
 		negroni.NewRecovery(),
 		negroni.NewLogger(),
+		middleware.Metrics(metricService),
 		negroni.HandlerFunc(middleware.EnforceJSONMiddleware),
 	)
 
-	// record
+	// handlers
 	handler.MakeRecordHandlers(r, *n, recordService)
-
-	// configuration
 	handler.MakeConfigurationHandlers(r, *n, configurationService)
 
 	// logger
@@ -55,10 +67,10 @@ func Run() {
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
 		Addr:         ":" + os.Getenv("API_PORT"),
-		//Handler:      context.ClearHandler(http.DefaultServeMux),
+		Handler:      context.ClearHandler(http.DefaultServeMux),
 		ErrorLog: logger,
 	}
-	err := srv.ListenAndServe()
+	err = srv.ListenAndServe()
 	if err != nil {
 		log.Fatal(err.Error())
 	}

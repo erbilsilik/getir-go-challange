@@ -23,9 +23,9 @@ dependencies:
 #endif
 build: docker
 
-#build-api:
-#	go build -tags $(GETIR_GO_CHALLANGE_ENV) -o ./bin/api api/main.go
-#
+build-api:
+	go build -tags $(GETIR_GO_CHALLANGE_ENV) -o ./bin/api api/server.go
+
 #build-cmd:
 #	go build -tags $(GETIR_GO_CHALLANGE_ENV) -o ./bin/cmd cmd/main.go
 
